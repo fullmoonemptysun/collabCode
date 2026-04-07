@@ -461,7 +461,7 @@
           flex: 1;
           display: flex;
           flex-direction: column;
-          overflow: hidden;
+          /* overflow: hidden; */
         }
 
         .editor-header {
@@ -492,14 +492,18 @@
         }
 
         .code-editor {
+      
           flex: 1;
-          display: flex;
+          height: 100%;
           overflow: auto;
           font-family: 'JetBrains Mono', monospace;
           font-size: 14px;
           line-height: 1.6;
         }
+        
 
+          /*----CULPRIT, THIS IS AN INSIDE CLASS IN MONACO WILL CAUSE ERRORS*/
+/* 
         .line-numbers {
           background: rgba(15, 15, 20, 0.4);
           padding: 16px 12px;
@@ -507,7 +511,7 @@
           user-select: none;
           color: rgba(228, 228, 231, 0.3);
           border-right: 1px solid rgba(255, 255, 255, 0.03);
-        }
+        } */
 
         .line-number {
           height: 22.4px;

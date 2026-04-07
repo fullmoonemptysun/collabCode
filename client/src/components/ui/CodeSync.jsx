@@ -71,7 +71,7 @@ export default function CodeMain() {
         
 
         {/* Editor Area */}
-        <Editor codeLines={codeLines}></Editor>
+        <Editor></Editor>
 
         <RightPanel availableColors={availableColors} activeUsers={activeUsers} messages={messages}></RightPanel>
       
