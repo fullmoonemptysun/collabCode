@@ -494,13 +494,35 @@
         .code-editor {
       
           flex: 1;
-          height: 100%;
+          
           overflow: auto;
           font-family: 'JetBrains Mono', monospace;
           font-size: 14px;
           line-height: 1.6;
         }
         
+
+        /*console area*/
+        .editor-console-cont{
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            
+            
+        }
+
+        .console{
+            height: 200px;
+            flex-shrink: 0;
+            background-color: black;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+
+        }
+
+        .console .tab-close{
+          position: relative;
+          left: 98%;
+        }
 
           /*----CULPRIT, THIS IS AN INSIDE CLASS IN MONACO WILL CAUSE ERRORS*/
 /* 
