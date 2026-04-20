@@ -1,33 +1,23 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useImperativeHandle } from "react";
 
 import * as monaco from "monaco-editor";
 
-const Editor = ({consoleOn}) => {
+const Editor = ({
+    editorRef,
+    consoleOn,
+    consoleData,
+    codeLines,
+    setCodeLines,
+}) => {
+
+    //ref to the div container DOM node for the editor
     const code_editor = useRef(null);
 
+    //the actual editor
     var codeEditor = null;
 
-    const [outConsole, setConsole] = useState(true)
-    const [position, setPosition] = useState({lang: "", lineNum: 0, col: 0})
-
-    const [codeLines, setCodeLines] = useState(
-        [
-        "function Hello() {",
-        "   console.log('Hello world');",
-        "   }",
-        "function Person(age) {",
-        "	if (age) {",
-        "		this.age = age;",
-        "	}",
-        "}",
-        "Person.prototype.getAge = function () {",
-        "	return this.age;",
-        "};",
-    ].join("\n")
-    )
-
-
-
+    const [outConsole, setConsole] = useState(true);
+    const [position, setPosition] = useState({ lang: "", lineNum: 0, col: 0 });
 
     useEffect(() => {
         if (code_editor.current) {
@@ -38,7 +28,7 @@ const Editor = ({consoleOn}) => {
                 colors: {
                     "editor.background": "#000000",
                 },
-            }); 
+            });
             codeEditor = monaco.editor.create(code_editor.current, {
                 value: codeLines,
                 language: "javascript",
@@ -51,31 +41,41 @@ const Editor = ({consoleOn}) => {
                 },
             });
 
-            
-
             //Update the position display for the first time
-            setPosition({lang: codeEditor.getModel().getLanguageId(), lineNum: codeEditor.getPosition().lineNumber, col: codeEditor.getPosition().column})
+            setPosition({
+                lang: codeEditor.getModel().getLanguageId(),
+                lineNum: codeEditor.getPosition().lineNumber,
+                col: codeEditor.getPosition().column,
+            });
             //Update it after code changes
-            codeEditor.onMouseUp(()=>{
-                setPosition({ lang: codeEditor.getModel().getLanguageId(), lineNum: codeEditor.getPosition().lineNumber, col: codeEditor.getPosition().column})
-            })
+            codeEditor.onMouseUp(() => {
+                setPosition({
+                    lang: codeEditor.getModel().getLanguageId(),
+                    lineNum: codeEditor.getPosition().lineNumber,
+                    col: codeEditor.getPosition().column,
+                });
+            });
 
-            var intervalID = setInterval(()=>{
+            var intervalID = setInterval(() => {
                 console.log(codeEditor.getValue());
-               
+
                 setCodeLines(codeEditor.getValue());
-                
-            }, 10000)
+            }, 10000);
 
             return () => {
                 if (codeEditor) {
-
                     codeEditor.dispose();
                     clearInterval(intervalID);
-
                 }
             };
         }
+    }, []);
+
+    useImperativeHandle(editorRef, () => {
+        return {
+            getValue: () => codeEditor.getValue(),
+            setConsole: (val) => setConsole(val)
+        };
     }, []);
 
     return (
@@ -103,12 +103,17 @@ const Editor = ({consoleOn}) => {
                     <div className="editor-info">
                         <span>UTF-8</span>
                         <span>•</span>
-                        <span>{position.lang.length >= 2?`${position.lang[0].toUpperCase()}${position.lang.substring(1, position.lang.length)}`:position.lang }</span>
+                        <span>
+                            {position.lang.length >= 2
+                                ? `${position.lang[0].toUpperCase()}${position.lang.substring(1, position.lang.length)}`
+                                : position.lang}
+                        </span>
                         <span>•</span>
-                        <span>Ln {position.lineNum}, Col {position.col}</span>
+                        <span>
+                            Ln {position.lineNum}, Col {position.col}
+                        </span>
                     </div>
                 </div>
-
 
                 <div className="editor-console-cont">
                     <div
@@ -116,15 +121,22 @@ const Editor = ({consoleOn}) => {
                         className="code-editor"
                         style={{ height: "100%" }}
                     ></div>
-                    {outConsole &&
-                    
-                        <div className={outConsole?"console":"console hidden"}>
+                    {outConsole && (
+                        <div
+                            className={
+                                outConsole ? "console" : "console hidden"
+                            }
+                        >
                             <div>
                                 <button className="tab-close">×</button>
                             </div>
-                            
+
+                            <pre>
+                                {consoleData.output &&
+                                    consoleData.output.join("\n")}
+                            </pre>
                         </div>
-                    }
+                    )}
                 </div>
 
                 {/* Mini Map */}

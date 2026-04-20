@@ -1,7 +1,7 @@
 import {useState} from 'react'
 import { Users, Terminal, GitBranch, MessageSquare, Play, Settings, Bell, Search, ChevronDown,  Share2, Lock, Globe } from 'lucide-react';
 import Avatar from './Avatar'
-const Navigation = ({activeUsers, availableColors}) => {
+const Navigation = ({activeUsers, availableColors, handleRun}) => {
    
 
     
@@ -48,7 +48,7 @@ const Navigation = ({activeUsers, availableColors}) => {
             <Bell size={18} />
           </button>
           
-          <button className="run-btn">
+          <button onClick={handleRun} className="run-btn">
             <Play size={14} />
             <span>Run</span>
           </button>
