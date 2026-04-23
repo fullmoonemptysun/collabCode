@@ -4,7 +4,6 @@ import * as monaco from "monaco-editor";
 
 const Editor = ({
     editorRef,
-    consoleOn,
     consoleData,
     codeLines,
     setCodeLines,
