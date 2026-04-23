@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const executeCode = (code) =>{
-    return axios.post('http://localhost:5000/execute', { code });
+    return axios.post('/execute', { code });
 }
 
 
